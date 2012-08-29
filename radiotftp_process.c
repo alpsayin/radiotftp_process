@@ -210,6 +210,11 @@ uint8_t queueSerialData(uint8_t* src, uint16_t src_port, uint8_t* dst, uint16_t 
 	//print_time("data queued");
 	wdt_reset();
 
+	if(process_post(&radiotftp_process, PROCESS_EVENT_COM, (void*) io)==PROCESS_ERR_FULL)
+	{
+		printf("incoming transmission discarded\n");
+	}
+	
 	return 0;
 }
 
