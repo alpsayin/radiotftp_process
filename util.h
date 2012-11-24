@@ -11,6 +11,8 @@
 #define BUILD __DATE__" "__TIME__
 #define GMT_OFFSET (+1)
 
+// #define PRINTF_D(fmt, ...) do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
+
 #if 1
 #define CHECKPOINT(x) do{ printf("===== CHECKPOINT #%d ===== %s()\n", x, __FUNCTION__); }while(0)
 #else
