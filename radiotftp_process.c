@@ -281,7 +281,7 @@ uint8_t udp_packet_demultiplexer(uint8_t* src, uint16_t src_port, uint8_t* dst, 
 		}
 		else if(dst_port==HELLO_WORLD_PORT)
 		{
-			PRINTF_D("New neighbour:\nIP = %d.%d.%d.%d\n", src[0], src[1], src[2], src[3];
+			PRINTF_D("New neighbour:\nIP = %d.%d.%d.%d\n", src[0], src[1], src[2], src[3]);
 		}
 		else
 		{
