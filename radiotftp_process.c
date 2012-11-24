@@ -21,7 +21,7 @@
 #include "avr_util.h"
 #include "printAsciiHex.h"
 
-const uint8_t my_ip_address[6] = MY_IPv6_ADDRESS;
+const uint8_t my_ip_address[4] = MY_IP_ADDRESS;
 
 #define PREAMBLE_LENGTH 10
 unsigned char preamble[PREAMBLE_LENGTH] =
@@ -59,7 +59,7 @@ volatile uint8_t timer_flag = 0;
 volatile uint8_t queue_flag = 0;
 volatile uint16_t numBytesToSend = 0;
 
-static uint8_t udp_src[6], udp_dst[6];
+static uint8_t udp_src[4], udp_dst[4];
 static uint16_t udp_src_prt, udp_dst_prt;
 
 #if PREAMBLE_LENGTH > 15
@@ -252,17 +252,17 @@ uint8_t udp_packet_demultiplexer(uint8_t* src, uint16_t src_port, uint8_t* dst, 
 {
 	//TODO put back the server functions to handle single block messages
 //    PRINTF_D("== udp packet handler ==\n");
-//    PRINTF_D("== SRC: %02x.%02x.%02x.%02x.%02x.%02x:%d ==\n", src[0], src[1], src[2], src[3], src[4], src[5], src_port);
-//    PRINTF_D("== DST: %02x.%02x.%02x.%02x.%02x.%02x:%d ==\n", dst[0], dst[1], dst[2], dst[3], dst[4], dst[5], dst_port);
+//    PRINTF_D("== SRC: %d.%d.%d.%d:%d ==\n", src[0], src[1], src[2], src[3], src_port);
+//    PRINTF_D("== DST: %d.%d.%d.%d:%d ==\n", dst[0], dst[1], dst[2], dst[3], dst_port);
 
 	uint8_t different = 0;
 	wdt_reset();
 
 	//check for address match
-	different = memcmp(udp_get_localhost_ip(NULL), dst, IPV6_DESTINATION_LENGTH);
+	different = memcmp(udp_get_localhost_ip(NULL), dst, IPV4_DESTINATION_LENGTH);
 	if(different)
 	{
-		different = memcmp(udp_get_broadcast_ip(NULL), dst, IPV6_DESTINATION_LENGTH);
+		different = memcmp(udp_get_broadcast_ip(NULL), dst, IPV4_DESTINATION_LENGTH);
 	}
 
 	if(!different)
@@ -281,7 +281,7 @@ uint8_t udp_packet_demultiplexer(uint8_t* src, uint16_t src_port, uint8_t* dst, 
 		}
 		else if(dst_port==HELLO_WORLD_PORT)
 		{
-			PRINTF_D("New neighbour:\nIP = %d.%d.%d.%d.%d.%d\n", src[0], src[1], src[2], src[3], src[4], src[5]);
+			PRINTF_D("New neighbour:\nIP = %d.%d.%d.%d\n", src[0], src[1], src[2], src[3];
 		}
 		else
 		{
@@ -356,7 +356,7 @@ PROCESS_THREAD(radiotftp_process, ev, data)
 		print_addr_hex(eth_get_local_address(NULL));
 #endif
 		udp_initialize_ip_network(my_ip_address, &queueSerialData);
-		PRINTF_D("IPv6 Address = ");
+		PRINTF_D("IPv4 Address = ");
 		print_addr_dec(udp_get_localhost_ip(NULL));
 		tftp_initialize(udp_get_data_queuer_fptr());
 

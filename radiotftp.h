@@ -33,7 +33,7 @@
 #define ETHERNET_ENABLED 0
 #define MY_AX25_CALLSIGN "SA0BXI\x0f"
 #define MY_ETHERNET_ADDRESS	{0xf0, 0x0, 0x0, 0x0, 0x0, 0x1}
-#define MY_IPv6_ADDRESS { 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6 }
+#define MY_IP_ADDRESS { 0xa1, 0xa2, 0xa3, 0xa4 }
 
 void radiotftpAlarm_callback(void* data);
 int uart0_rx(unsigned char receivedByte);
