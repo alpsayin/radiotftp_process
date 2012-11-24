@@ -6,51 +6,58 @@
  */
 
 #ifndef UDP_H
-#define	UDP_H
+#define UDP_H
 
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdint.h>
 
-#include "ethernet.h"
+#include "ax25.h"
 
-#define UDP_MAX_PAYLOAD_LENGTH (516) //derived from the tftp requirement
-#define UDP_TOTAL_HEADERS_LENGTH (28)
+#define UDP_MAX_PAYLOAD_LENGTH (256)
+#define UDP_TOTAL_HEADERS_LENGTH (18+8)
 
-#define IPV6_VERSION_PRIORITY_LENGTH 1
-#define IPV6_FLOW_LABEL_LENGTH 3
-#define IPV6_PAYLOAD_LENGTH_LENGTH 2
-#define IPV6_NEXT_HEADER_LENGTH 1
-#define IPV6_HOP_LIMIT_LENGTH 1
-#define IPV6_SOURCE_LENGTH 6
-#define IPV6_DESTINATION_LENGTH 6
+#define IPV4_VERSIONnIHL_LENGTH 1
+#define IPV4_DSCPnECN_LENGTH 1
+#define IPV4_TOTAL_LENGTH_LENGTH 2
+#define IPV4_IDENTIFICATION_LENGTH 2
+#define IPV4_FLAGSnFRAGMENT_OFFSET_LENGTH 2
+#define IPV4_TIME_TO_LIVE_LENGTH 1
+#define IPV4_PROTOCOL_LENGTH 1
+#define IPV4_HEADER_CHECKSUM_LENGTH 2
+#define IPV4_SOURCE_LENGTH 4
+#define IPV4_DESTINATION_LENGTH 4
 
-#define IPV6_VERSION_PRIORITY_OFFSET 0
-#define IPV6_FLOW_LABEL_OFFSET (IPV6_VERSION_PRIORITY_OFFSET+IPV6_VERSION_PRIORITY_LENGTH)
-#define IPV6_PAYLOAD_LENGTH_OFFSET (IPV6_FLOW_LABEL_OFFSET+IPV6_FLOW_LABEL_LENGTH)
-#define IPV6_NEXT_HEADER_OFFSET (IPV6_PAYLOAD_LENGTH_OFFSET+IPV6_PAYLOAD_LENGTH_LENGTH)
-#define IPV6_HOP_LIMIT_OFFSET (IPV6_NEXT_HEADER_OFFSET+IPV6_NEXT_HEADER_LENGTH)
-#define IPV6_SOURCE_OFFSET (IPV6_HOP_LIMIT_OFFSET+IPV6_HOP_LIMIT_LENGTH)
-#define IPV6_DESTINATION_OFFSET (IPV6_SOURCE_OFFSET+IPV6_SOURCE_LENGTH)
-#define IPV6_PAYLOAD_OFFSET (IPV6_DESTINATION_OFFSET+IPV6_DESTINATION_LENGTH)
+#define IPV4_VERSIONnIHL_OFFSET 0
+#define IPV4_DSCPnECN_OFFSET (IPV4_VERSIONnIHL_OFFSET+IPV4_VERSIONnIHL_LENGTH)
+#define IPV4_TOTAL_LENGTH_OFFSET (IPV4_DSCPnECN_OFFSET+IPV4_DSCPnECN_LENGTH)
+#define IPV4_IDENTIFICATION_OFFSET (IPV4_TOTAL_LENGTH_OFFSET+IPV4_TOTAL_LENGTH_LENGTH)
+#define IPV4_FLAGSnFRAGMENT_OFFSET_OFFSET (IPV4_IDENTIFICATION_OFFSET+IPV4_IDENTIFICATION_LENGTH)
+#define IPV4_TIME_TO_LIVE_OFFSET (IPV4_FLAGSnFRAGMENT_OFFSET_OFFSET+IPV4_FLAGSnFRAGMENT_OFFSET_LENGTH)
+#define IPV4_PROTOCOL_OFFSET (IPV4_TIME_TO_LIVE_OFFSET+IPV4_TIME_TO_LIVE_LENGTH)
+#define IPV4_HEADER_CHECKSUM_OFFSET (IPV4_PROTOCOL_OFFSET+IPV4_PROTOCOL_LENGTH)
+#define IPV4_SOURCE_OFFSET (IPV4_HEADER_CHECKSUM_OFFSET+IPV4_HEADER_CHECKSUM_LENGTH)
+#define IPV4_DESTINATION_OFFSET (IPV4_SOURCE_OFFSET+IPV4_SOURCE_LENGTH)
+#define IPV4_PAYLOAD_OFFSET (IPV4_DESTINATION_OFFSET+IPV4_DESTINATION_LENGTH)
 
 #define UDP_SOURCE_PORT_LENGTH 2
 #define UDP_DESTINATION_PORT_LENGTH 2
 #define UDP_LENGTH_LENGTH 2
 #define UDP_CHECKSUM_LENGTH 2
 
-#define UDP_SOURCE_PORT_OFFSET (IPV6_PAYLOAD_OFFSET)
+#define UDP_SOURCE_PORT_OFFSET (IPV4_PAYLOAD_OFFSET)
 #define UDP_DESTINATION_PORT_OFFSET (UDP_SOURCE_PORT_OFFSET+UDP_SOURCE_PORT_LENGTH)
 #define UDP_LENGTH_OFFSET (UDP_DESTINATION_PORT_OFFSET+UDP_DESTINATION_PORT_LENGTH)
 #define UDP_CHECKSUM_OFFSET (UDP_LENGTH_OFFSET+UDP_LENGTH_LENGTH)
 #define UDP_PAYLOAD_OFFSET (UDP_CHECKSUM_OFFSET+UDP_CHECKSUM_LENGTH)
 
-#define IPV6_HOP_LIMIT 2
+#define IPV4_TTL_LIMIT 2
+#define UDP_IPV4_PROTOCOL_NUMBER 0x11
 
 #define PACKET_HANDLER_FUNCTION_PROTO( appName) uint8_t appName(uint8_t* src, uint16_t src_port, uint8_t* dst, uint16_t dst_port, uint8_t* payload, uint16_t len)
 #define PACKET_HANDLER_FUNCTION( appName) uint8_t appName(uint8_t* src, uint16_t src_port, uint8_t* dst, uint16_t dst_port, uint8_t* payload, uint16_t len)
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 extern "C" {
 #endif
 
@@ -77,16 +84,23 @@ extern "C" {
                                         uint8_t* dst_out, uint16_t* dst_port_out,
                                         uint8_t* payload_out,
                                         uint8_t* packet_in,
-                                        uint8_t* flow_label_out,
-                                        uint8_t* hop_limit_out,
-                                        uint8_t* next_header_out,
                                         uint8_t* version_out,
-                                        uint8_t* priority_out);
+                                        uint8_t* headerlength_out,
+                                        uint8_t* dscp_out,
+                                        uint8_t* ecn_out,
+                                        uint16_t* totallength_out,
+                                        uint16_t* fragmentidentification_out,
+                                        uint8_t* flags_out,
+                                        uint16_t* fragmentoffset_out,
+                                        uint8_t* ttl_out,
+                                        uint8_t* protocol_out,
+                                        uint16_t* headerchecksum_out
+                                        );
     
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 }
 #endif
 
-#endif	/* UDP_H */
+#endif  /* UDP_H */
 
