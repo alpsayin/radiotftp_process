@@ -77,6 +77,7 @@ extern "C" {
 
     uint8_t tftp_getRandomRetransmissionTime(void);
 
+    uint8_t tftp_getStatus(void);
     void tftp_setStatus(uint8_t newStatus);
 
     uint16_t tftp_transfer_src_port(void);
