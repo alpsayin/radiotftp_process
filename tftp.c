@@ -1,4 +1,3 @@
-
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -34,7 +33,10 @@ uint8_t tftp_initialize(dataQueuerfptr_t dataQueuer)
     //timers_create_timer("TFTP Timer", &tftp_timer, 3, 0);
     return 0;
 }
-
+uint8_t tftp_getStatus(void)
+{
+	return status;
+}
 void tftp_setStatus(uint8_t newStatus)
 {
     status=newStatus;
